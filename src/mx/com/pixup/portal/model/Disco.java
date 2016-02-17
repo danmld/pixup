@@ -5,35 +5,39 @@
  */
 package mx.com.pixup.portal.model;
 
+import java.sql.Date;
+import java.util.List;
+
 /**
  *
- * @author daniel
+ * @author rodvazqu
  */
 public class Disco {
-    
-    private int id;
+    private Integer id;
     private String titulo;
-    private String fecha_lanzamiento;
-    private float precio;
-    private int cantidad_disponible;
-    private int id_idioma;
-    private int id_pais;
-    private int id_disquera;
-    private int id_genero_musical;
-    private int id_promocion;
-    private int id_iva;
+    private Date fechaLanzamiento;
+    private Float precio;
+    private Integer cantidadDisponible;
+    private Idioma idioma;
+    private Pais pais;
+    private Disquera disquera;
+    private GeneroMusical generoMusical;
+    private Promocion promocion;
+    private Iva iva;
+    private String rutaImagen;
+    private List<Artista> artistas;
 
     /**
      * @return the id
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -52,129 +56,158 @@ public class Disco {
     }
 
     /**
-     * @return the fecha_lanzamiento
+     * @return the fechaLanzamiento
      */
-    public String getFecha_lanzamiento() {
-        return fecha_lanzamiento;
+    public Date getFechaLanzamiento() {
+        return fechaLanzamiento;
     }
 
     /**
-     * @param fecha_lanzamiento the fecha_lanzamiento to set
+     * @param fechaLanzamiento the fechaLanzamiento to set
      */
-    public void setFecha_lanzamiento(String fecha_lanzamiento) {
-        this.fecha_lanzamiento = fecha_lanzamiento;
+    public void setFechaLanzamiento(Date fechaLanzamiento) {
+        this.fechaLanzamiento = fechaLanzamiento;
     }
 
     /**
      * @return the precio
      */
-    public float getPrecio() {
+    public Float getPrecio() {
         return precio;
     }
 
     /**
      * @param precio the precio to set
      */
-    public void setPrecio(float precio) {
+    public void setPrecio(Float precio) {
         this.precio = precio;
     }
 
     /**
-     * @return the cantidad_disponible
+     * @return the cantidadDisponible
      */
-    public int getCantidad_disponible() {
-        return cantidad_disponible;
+    public Integer getCantidadDisponible() {
+        return cantidadDisponible;
     }
 
     /**
-     * @param cantidad_disponible the cantidad_disponible to set
+     * @param cantidadDisponible the cantidadDisponible to set
      */
-    public void setCantidad_disponible(int cantidad_disponible) {
-        this.cantidad_disponible = cantidad_disponible;
+    public void setCantidadDisponible(Integer cantidadDisponible) {
+        this.cantidadDisponible = cantidadDisponible;
     }
 
     /**
-     * @return the id_idioma
+     * @return the idioma
      */
-    public int getId_idioma() {
-        return id_idioma;
+    public Idioma getIdioma() {
+        return idioma;
     }
 
     /**
-     * @param id_idioma the id_idioma to set
+     * @param idioma the idioma to set
      */
-    public void setId_idioma(int id_idioma) {
-        this.id_idioma = id_idioma;
+    public void setIdioma(Idioma idioma) {
+        this.idioma = idioma;
     }
 
     /**
-     * @return the id_pais
+     * @return the pais
      */
-    public int getId_pais() {
-        return id_pais;
+    public Pais getPais() {
+        return pais;
     }
 
     /**
-     * @param id_pais the id_pais to set
+     * @param pais the pais to set
      */
-    public void setId_pais(int id_pais) {
-        this.id_pais = id_pais;
+    public void setPais(Pais pais) {
+        this.pais = pais;
     }
 
     /**
-     * @return the id_disquera
+     * @return the disquera
      */
-    public int getId_disquera() {
-        return id_disquera;
+    public Disquera getDisquera() {
+        return disquera;
     }
 
     /**
-     * @param id_disquera the id_disquera to set
+     * @param disquera the disquera to set
      */
-    public void setId_disquera(int id_disquera) {
-        this.id_disquera = id_disquera;
+    public void setDisquera(Disquera disquera) {
+        this.disquera = disquera;
     }
 
     /**
-     * @return the id_genero_musical
+     * @return the generoMusical
      */
-    public int getId_genero_musical() {
-        return id_genero_musical;
+    public GeneroMusical getGeneroMusical() {
+        return generoMusical;
     }
 
     /**
-     * @param id_genero_musical the id_genero_musical to set
+     * @param generoMusical the generoMusical to set
      */
-    public void setId_genero_musical(int id_genero_musical) {
-        this.id_genero_musical = id_genero_musical;
+    public void setGeneroMusical(GeneroMusical generoMusical) {
+        this.generoMusical = generoMusical;
     }
 
     /**
-     * @return the id_promocion
+     * @return the promocion
      */
-    public int getId_promocion() {
-        return id_promocion;
+    public Promocion getPromocion() {
+        return promocion;
     }
 
     /**
-     * @param id_promocion the id_promocion to set
+     * @param promocion the promocion to set
      */
-    public void setId_promocion(int id_promocion) {
-        this.id_promocion = id_promocion;
+    public void setPromocion(Promocion promocion) {
+        this.promocion = promocion;
     }
 
     /**
-     * @return the id_iva
+     * @return the iva
      */
-    public int getId_iva() {
-        return id_iva;
+    public Iva getIva() {
+        return iva;
     }
 
     /**
-     * @param id_iva the id_iva to set
+     * @param iva the iva to set
      */
-    public void setId_iva(int id_iva) {
-        this.id_iva = id_iva;
+    public void setIva(Iva iva) {
+        this.iva = iva;
     }
+
+    /**
+     * @return the rutaImagen
+     */
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    /**
+     * @param rutaImagen the rutaImagen to set
+     */
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
+
+    /**
+     * @return the artistas
+     */
+    public List<Artista> getArtistas() {
+        return artistas;
+    }
+
+    /**
+     * @param artistas the artistas to set
+     */
+    public void setArtistas(List<Artista> artistas) {
+        this.artistas = artistas;
+    }
+
     
 }
