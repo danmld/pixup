@@ -390,7 +390,7 @@ public class DiscoDaoJdbc implements DiscoDao {
 
     }
     
-    
+    //prueba
     public static void main(String[] args) {
         DiscoDaoJdbc discoDao = new DiscoDaoJdbc();
         List<Disco> discos = discoDao.findAllDiscos();
