@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mx.com.pixup.portal.dao;
+package mx.com.pixup.portal.dao.interfaces;
 
 import java.util.List;
 import mx.com.pixup.portal.model.Disco;
@@ -17,5 +17,5 @@ public interface DiscoDao {
     Disco updateDisco(Disco disco);
     void deleteDisco(Disco disco);
     List<Disco> findAllDiscos();
-    Disco findById(Long idDisco);
+    Disco findById(int idDisco);
 }

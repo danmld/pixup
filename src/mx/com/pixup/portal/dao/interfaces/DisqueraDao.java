@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mx.com.pixup.portal.dao;
+package mx.com.pixup.portal.dao.interfaces;
 
 import java.util.List;
 import mx.com.pixup.portal.model.Disquera;
@@ -18,6 +18,6 @@ public interface DisqueraDao {
     Disquera updateDisquera(Disquera disquera);
     void deleteDisquera(Disquera disquera);
     List<Disquera> findAllDisqueras();
-    Disquera findById(Long idDisquera);
+    Disquera findById(Integer idDisquera);
     
 }

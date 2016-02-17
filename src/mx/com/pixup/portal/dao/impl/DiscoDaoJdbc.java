@@ -211,7 +211,7 @@ public class DiscoDaoJdbc implements DiscoDao {
     }
 
     @Override
-    public Disco findById(Integer id) {
+    public Disco findById(int id) {
         String sql = "SELECT * FROM disco"
                 + " JOIN idioma ON idioma.id = disco.id_idioma"
                 + " JOIN pais ON pais.id = disco.id_pais"
@@ -389,5 +389,18 @@ public class DiscoDaoJdbc implements DiscoDao {
         }
 
     }
+    
+    
+    public static void main(String[] args) {
+        DiscoDaoJdbc discoDao = new DiscoDaoJdbc();
+        List<Disco> discos = discoDao.findAllDiscos();
+        
+        for(Disco disco : discos)
+        {
+            System.out.println("Disco: " + disco.getTitulo());
+        }
+    }
+
+    
 
 }

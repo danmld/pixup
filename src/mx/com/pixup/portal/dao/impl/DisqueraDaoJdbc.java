@@ -98,8 +98,7 @@ public class DisqueraDaoJdbc implements DisqueraDao {
     }
 
     @Override
-    public Disquera findById(Integer id
-    ) {
+    public Disquera findById(Integer id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

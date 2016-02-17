@@ -42,17 +42,27 @@ public class DBConecta {
      * Lee los parámetros de conexion del archivo JDBC.properties y los guarda en en dbProp
      */
     public DBConecta() {
-        ResourceBundle rsb = ResourceBundle.getBundle("setup");
-
-        Enumeration enum1 = rsb.getKeys();
-        Properties dbProp = new Properties();
-        while (enum1.hasMoreElements()) {
-            String sTmp = (String) enum1.nextElement();
-            dbProp.setProperty(sTmp, rsb.getString(sTmp));
-            //System.out.println("+" + sTmp );
+        try
+        {
+            ResourceBundle rsb = ResourceBundle.getBundle("setup");
+            Enumeration enum1 = rsb.getKeys();
+            Properties dbProp = new Properties();
+            while (enum1.hasMoreElements()) {
+                String sTmp = (String) enum1.nextElement();
+                dbProp.setProperty(sTmp, rsb.getString(sTmp));
+                //System.out.println("+" + sTmp );
+            }
+            this.dbProp = dbProp;
+            System.out.println(dbProp);
+            
         }
-        this.dbProp = dbProp;
-        System.out.println(dbProp);
+        catch(Exception e)
+        {
+            System.out.println("+" + e.getMessage());
+        }
+        
+
+        
     }
     
     public static DBConecta getInstance() 

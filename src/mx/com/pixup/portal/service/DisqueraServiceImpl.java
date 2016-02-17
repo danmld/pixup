@@ -6,8 +6,8 @@
 package mx.com.pixup.portal.service;
 
 import java.util.List;
-import mx.com.pixup.portal.dao.DisqueraDao;
-import mx.com.pixup.portal.dao.DisqueraDaoJdbc;
+import mx.com.pixup.portal.dao.interfaces.DisqueraDao;
+import mx.com.pixup.portal.dao.impl.DisqueraDaoJdbc;
 import mx.com.pixup.portal.model.Disquera;
 
 /**
