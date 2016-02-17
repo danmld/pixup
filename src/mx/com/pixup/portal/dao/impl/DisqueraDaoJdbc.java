@@ -24,135 +24,119 @@ import mx.com.pixup.portal.model.Disquera;
  */
 public class DisqueraDaoJdbc implements DisqueraDao {
 
-    public DisqueraDaoJdbc(){
+    public DisqueraDaoJdbc() {       
+       
     }
-    
+
     @Override
-    public Disquera insertDisquera(Disquera disquera) {
-        Connection connection = null;
+    public Disquera insertDisquera(Disquera disquera) {        
+        Connection connection = DBConecta.getConnection();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        
         String sql = "insert into disquera (nombre) values (?)";
-
         try {
-            connection = DBConecta.getConnection();
-
-            connection.setAutoCommit(false);
             
-            preparedStatement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+            preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, disquera.getNombre());
-
             preparedStatement.execute();
-
-            connection.commit();
-            resultSet = preparedStatement.getGeneratedKeys();
             
+            resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
             disquera.setId(resultSet.getInt(1));
             
             return disquera;
-        } catch (SQLException ex) {
-            Logger.getLogger(DisqueraDaoJdbc.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            Logger.getLogger(DBConecta.class.getName()).log(Level.SEVERE, null, e);
+            return null;
         } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (Exception e) {
-                }
-            }
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (Exception e) {
-                }
-            }
-
+            if(preparedStatement != null) { try{ preparedStatement.close();} catch(Exception e){}}
+            if(connection != null) { try{ connection.close();} catch(Exception e){}}
         }
-        return null;
+    }
+
+    @Override
+    public Disquera updateDisquera(Disquera disquera) {
+        String sql = "update disquera set nombre = ? where id = ?";
+        Connection connection = DBConecta.getConnection();
+        try (
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
+            preparedStatement.setString(1, disquera.getNombre());
+            preparedStatement.setInt(2, disquera.getId());
+            preparedStatement.execute();
+            return disquera;
+        } catch (Exception e) {
+            return null;
+        } 
+    }
+
+    @Override
+    public void deleteDisquera(Disquera disquera) {       
+        Connection connection = DBConecta.getConnection();
+        PreparedStatement preparedStatement = null;
+        String sql = "delete from disquera  where id = ?";
+        try {            
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, disquera.getId());
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Logger.getLogger(DBConecta.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if(preparedStatement != null) { try{ preparedStatement.close();} catch(Exception e){}}
+            if(connection != null) { try{ connection.close();} catch(Exception e){}}
+        }
     }
 
     @Override
     public List<Disquera> findAllDisqueras() {
-
+        Connection connection = DBConecta.getConnection();
         String sql = "select * from disquera";
         List<Disquera> disqueras = new ArrayList<Disquera>();
-        
-        try (Connection connection = DBConecta.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                ResultSet resultSet = preparedStatement.executeQuery();) {
-                
-            while (resultSet.next()) {
-                Disquera temp = new Disquera();
-                temp.setId(resultSet.getInt("id"));
-                temp.setNombre(resultSet.getString("nombre"));
-                disqueras.add(temp);
+        try (
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery();) {
+            while(resultSet.next()) {                
+                Disquera disquera = new Disquera();
+                disquera.setId(resultSet.getInt(1));
+                disquera.setNombre(resultSet.getString(2));
+                disqueras.add(disquera);
             }
-
-            
-        } catch (SQLException e) {
-            return null;
-        }
+        } catch (Exception e) {
+            Logger.getLogger(DBConecta.class.getName()).log(Level.SEVERE, null, e);
+        } 
         return disqueras;
-
     }
 
     @Override
-    public Disquera findById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Disquera updateDisquera(Disquera disquera){
-        String sql = "update disquera set nombre = ? where id = ?";
-        try (Connection connection = DBConecta.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                ) {
-            preparedStatement.setInt(2, disquera.getId());
-            preparedStatement.setString(1, disquera.getNombre());
-            
-            preparedStatement.execute();
-            
-        } catch (SQLException e) {
-            return null;
+    public Disquera findById(Integer idDisquera) {
+        Connection connection = DBConecta.getConnection();
+        String sql = "select * from disquera where id = " + idDisquera;
+        Disquera disquera = new Disquera();
+        try (
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery();) {
+            while(resultSet.next()) {
+                disquera.setId(resultSet.getInt("id"));
+                disquera.setNombre(resultSet.getString("nombre"));                
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DBConecta.class.getName()).log(Level.SEVERE, null, e);
         }
         return disquera;
-
     }
 
-    @Override
-    public void deleteDisquera(Disquera disquera) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        
-        String sql = "delete from disquera where id = ?";
-
-        try {
-            connection = DBConecta.getConnection();
-
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, disquera.getId());
-
-            preparedStatement.execute();
-
-        } catch (SQLException e) {
-
-        } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                }
-            }
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                }
-            }
-
+    public static void main(String[] args) {
+        DisqueraDaoJdbc disqueraDao = new DisqueraDaoJdbc();        
+        List<Disquera> listDisqueras = disqueraDao.findAllDisqueras();
+        for(Disquera disquera : listDisqueras)
+        {
+            System.out.println("id: " + disquera.getNombre() );
         }
-
+        
+        Disquera d = disqueraDao.findById(1);
+        
+        d.setNombre("daniel rec");
+        disqueraDao.updateDisquera(d);
+        System.out.println(""+d.getNombre());
     }
 
 }
