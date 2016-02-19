@@ -49,7 +49,7 @@ public class CancionDaoJdbc implements CancionDao {
     }
 
     @Override
-    public List<Cancion> findAllCancions() {
+    public List<Cancion> findAllCanciones() {
 
         String sql = "select * from cancion order by id";
         List<Cancion> canciones = new ArrayList<>();

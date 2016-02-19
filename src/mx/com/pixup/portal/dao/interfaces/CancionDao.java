@@ -14,7 +14,7 @@ import mx.com.pixup.portal.model.Cancion;
  */
 public interface CancionDao {
     Cancion insertCancion(Cancion cancion);
-    List<Cancion> findAllCancions();
+    List<Cancion> findAllCanciones();
     Cancion findById(Integer id);
     Cancion updateCancion(Cancion cancion);
     void deleteCancion(Cancion cancion);
