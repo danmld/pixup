@@ -1,7 +1,7 @@
 package mx.com.pixup.portal.model;
 
 import java.util.List;
-
+//vrsa9208 was here
 /**
  *
  * @author rodvazqu
