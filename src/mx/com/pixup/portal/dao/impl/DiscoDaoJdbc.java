@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package mx.com.pixup.portal.dao.impl;
 
 import mx.com.pixup.portal.dao.interfaces.DiscoDao;
@@ -12,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mx.com.pixup.portal.db.DBConecta;
 import mx.com.pixup.portal.model.Artista;
+import mx.com.pixup.portal.model.Cancion;
 import mx.com.pixup.portal.model.Disco;
 import mx.com.pixup.portal.model.Disquera;
 import mx.com.pixup.portal.model.GeneroMusical;
@@ -55,6 +61,13 @@ public class DiscoDaoJdbc implements DiscoDao {
                 + "id_artista"
                 + ") "
                 + "values (?,?)";
+        
+        String sqlCanciones = "INSERT INTO disco_cancion ("
+                + "id_disco,"
+                + "id_cancion"
+                + ") "
+                + "values (?,?)";
+        
 
         try {
             connection = DBConecta.getConnection();
@@ -94,6 +107,14 @@ public class DiscoDaoJdbc implements DiscoDao {
                 preparedStatement = connection.prepareStatement(sqlArtistas);
                 preparedStatement.setInt(1, disco.getId());
                 preparedStatement.setInt(2, artista.getId());
+                preparedStatement.execute();
+            }
+            
+            List<Cancion> canciones = disco.getCanciones();
+            for(Cancion cancion : canciones){
+                preparedStatement = connection.prepareStatement(sqlCanciones);
+                preparedStatement.setInt(1, disco.getId());
+                preparedStatement.setInt(2, cancion.getId());
                 preparedStatement.execute();
             }
             connection.commit();
@@ -188,11 +209,27 @@ public class DiscoDaoJdbc implements DiscoDao {
                 while (rs.next()) {
                     Artista artista = new Artista();
                     artista.setId(rs.getInt("id"));
-                    artista.setNombreArtistico("nombre_artistico");
-                    artista.setDescripcion("descripcion");
+                    artista.setNombreArtistico(rs.getString("nombre_artistico"));
+                    artista.setDescripcion(rs.getString("descripcion"));
                     artistas.add(artista);
                 }
                 temp.setArtistas(artistas);
+                
+                String sqlCancion = "SELECT cancion.* from cancion"
+                        + " JOIN disco_cancion ON disco_cancion.id_cancion = cancion.id"
+                        + " WHERE disco_cancion.id_disco = ?";
+                preparedStatement = connection.prepareStatement(sqlCancion);
+                preparedStatement.setInt(1, temp.getId());
+                rs = preparedStatement.executeQuery();
+                List<Cancion> canciones = new ArrayList<>();
+                while (rs.next()) {
+                    Cancion cancion = new Cancion();
+                    cancion.setId(rs.getInt("id"));
+                    cancion.setNombre(rs.getString("nombre"));
+                    cancion.setDuracion(rs.getTime("duracion"));
+                    canciones.add(cancion);
+                }
+                temp.setCanciones(canciones);
                 discos.add(temp);
             }
 
@@ -211,7 +248,7 @@ public class DiscoDaoJdbc implements DiscoDao {
     }
 
     @Override
-    public Disco findById(int id) {
+    public Disco findById(Integer id) {
         String sql = "SELECT * FROM disco"
                 + " JOIN idioma ON idioma.id = disco.id_idioma"
                 + " JOIN pais ON pais.id = disco.id_pais"
@@ -275,11 +312,28 @@ public class DiscoDaoJdbc implements DiscoDao {
             while (rs.next()) {
                 Artista artista = new Artista();
                 artista.setId(rs.getInt("id"));
-                artista.setNombreArtistico("nombre_artistico");
-                artista.setDescripcion("descripcion");
+                artista.setNombreArtistico(rs.getString("nombre_artistico"));
+                artista.setDescripcion(rs.getString("descripcion"));
                 artistas.add(artista);
             }
             disco.setArtistas(artistas);
+
+            String sqlCancion = "SELECT cancion.* from cancion"
+                    + " JOIN disco_cancion ON disco_cancion.id_cancion = cancion.id"
+                    + " WHERE disco_cancion.id_disco = ?";
+            preparedStatement = connection.prepareStatement(sqlCancion);
+            preparedStatement.setInt(1, disco.getId());
+            rs = preparedStatement.executeQuery();
+            List<Cancion> canciones = new ArrayList<>();
+            while (rs.next()) {
+                Cancion cancion = new Cancion();
+                cancion.setId(rs.getInt("id"));
+                cancion.setNombre(rs.getString("nombre"));
+                cancion.setDuracion(rs.getTime("duracion"));
+                canciones.add(cancion);
+            }
+            disco.setCanciones(canciones);
+            
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
@@ -389,18 +443,5 @@ public class DiscoDaoJdbc implements DiscoDao {
         }
 
     }
-    
-    //prueba
-    public static void main(String[] args) {
-        DiscoDaoJdbc discoDao = new DiscoDaoJdbc();
-        List<Disco> discos = discoDao.findAllDiscos();
-        
-        for(Disco disco : discos)
-        {
-            System.out.println("Disco: " + disco.getTitulo());
-        }
-    }
-
-    
 
 }

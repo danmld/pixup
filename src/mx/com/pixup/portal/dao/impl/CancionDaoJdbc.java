@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package mx.com.pixup.portal.dao.impl;
 
 import mx.com.pixup.portal.dao.interfaces.CancionDao;
@@ -15,55 +20,84 @@ import mx.com.pixup.portal.model.Cancion;
 
 /**
  *
- * @author rodvazqu
+ * @author JAVA-07
  */
 public class CancionDaoJdbc implements CancionDao {
 
-    public CancionDaoJdbc() {
-
+    public CancionDaoJdbc(){
+        
     }
-
+    
     @Override
     public Cancion insertCancion(Cancion cancion) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        String sql = "insert into cancion(nombre,duracion) values (?,?)";
-        try (Connection connection = DBConecta.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        
+        String sql = "insert into cancion ("
+                + "nombre,"
+                + "duracion"
+                + ") "
+                + "values (?,?)";
+
+        try {
+            connection = DBConecta.getConnection();
+
+            connection.setAutoCommit(false);
+            
+            preparedStatement = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, cancion.getNombre());
-            preparedStatement.setString(2, cancion.getDuracion());
+            preparedStatement.setTime(2, cancion.getDuracion());
+            
+            //preparedStatement.setNull(1, java.sql.Types.NULL);
+
             preparedStatement.execute();
+
+            connection.commit();
             resultSet = preparedStatement.getGeneratedKeys();
+            
             resultSet.next();
             cancion.setId(resultSet.getInt(1));
+            
             return cancion;
-        } catch (Exception e) {
-            return null;
+        } catch (SQLException ex) {
+            Logger.getLogger(CancionDaoJdbc.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if (resultSet != null) {
+            if (preparedStatement != null) {
                 try {
-                    resultSet.close();
+                    preparedStatement.close();
                 } catch (Exception e) {
                 }
             }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Exception e) {
+                }
+            }
+
         }
+        return null;
     }
 
     @Override
     public List<Cancion> findAllCanciones() {
 
-        String sql = "select * from cancion order by id";
+        String sql = "select * from cancion";
         List<Cancion> canciones = new ArrayList<>();
+        
         try (Connection connection = DBConecta.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 ResultSet resultSet = preparedStatement.executeQuery();) {
+                
             while (resultSet.next()) {
-                Cancion cancion = new Cancion();
-                cancion.setId(resultSet.getInt(1));
-                cancion.setNombre(resultSet.getString(2));
-                cancion.setDuracion(resultSet.getString(3));
-                canciones.add(cancion);
+                Cancion temp = new Cancion();
+                temp.setId(resultSet.getInt("id"));
+                temp.setNombre(resultSet.getString("nombre"));
+                temp.setDuracion(resultSet.getTime("duracion"));
+                canciones.add(temp);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             return null;
         }
         return canciones;
@@ -72,7 +106,8 @@ public class CancionDaoJdbc implements CancionDao {
 
     @Override
     public Cancion findById(Integer id) {
-        String sql = "SELECT * FROM cancion WHERE id = ?";
+        String sql = "SELECT * FROM cancion"
+                + " WHERE id = ?";
         Cancion cancion = new Cancion();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -83,37 +118,45 @@ public class CancionDaoJdbc implements CancionDao {
             resultSet.next();
             cancion.setId(resultSet.getInt("id"));
             cancion.setNombre(resultSet.getString("nombre"));
-            cancion.setDuracion(resultSet.getString("duracion"));
-
-        } catch (Exception e) {
+            cancion.setDuracion(resultSet.getTime("duracion"));
+            
+        } catch (SQLException e) {
             return null;
-        } finally {
+        }
+        finally {
             if (resultSet != null) {
                 try {
                     resultSet.close();
-                } catch (Exception e) {
+                } catch (SQLException e) {
                 }
             }
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                }
+            }
+            
         }
         return cancion;
     }
 
     @Override
-    public Cancion updateCancion(Cancion cancion) {
-        String sql = "update cancion set nombre = ?,duracion = ? where id = ?";
+    public Cancion updateCancion(Cancion cancion){
+        String sql = "update cancion set "
+                + "nombre = ?"
+                + ",duracion = ?"
+                + " where id = ?";
         try (Connection connection = DBConecta.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                ) {
             preparedStatement.setString(1, cancion.getNombre());
-            if (cancion.getDuracion() != null && cancion.getDuracion().length() > 0) {
-                preparedStatement.setString(2, cancion.getDuracion());
-            } else {
-                preparedStatement.setNull(2, java.sql.Types.NULL);
-            }
-
+            preparedStatement.setTime(2, cancion.getDuracion());
+            
             preparedStatement.setInt(3, cancion.getId());
-
+            
             preparedStatement.execute();
-
+            
         } catch (SQLException e) {
             return null;
         }
@@ -123,15 +166,37 @@ public class CancionDaoJdbc implements CancionDao {
 
     @Override
     public void deleteCancion(Cancion cancion) {
-
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        
         String sql = "delete from cancion where id = ?";
 
-        try (Connection connection = DBConecta.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
+        try {
+            connection = DBConecta.getConnection();
+
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, cancion.getId());
+
             preparedStatement.execute();
-        } catch (Exception e) {
+
+        } catch (SQLException e) {
+
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                }
+            }
+
         }
+
     }
 
 }

@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package mx.com.pixup.portal.dao.impl;
 
 import mx.com.pixup.portal.dao.interfaces.ArtistaDao;
@@ -15,7 +20,7 @@ import mx.com.pixup.portal.model.Artista;
 
 /**
  *
- * @author rodvazqu
+ * @author JAVA-07
  */
 public class ArtistaDaoJdbc implements ArtistaDao {
 
@@ -33,7 +38,7 @@ public class ArtistaDaoJdbc implements ArtistaDao {
                 + "nombre_artistico,"
                 + "descripcion"
                 + ") "
-                + "values (?)";
+                + "values (?,?)";
 
         try {
             connection = DBConecta.getConnection();
@@ -93,7 +98,7 @@ public class ArtistaDaoJdbc implements ArtistaDao {
                 Artista temp = new Artista();
                 temp.setId(resultSet.getInt("id"));
                 temp.setNombreArtistico(resultSet.getString("nombre_artistico"));
-                temp.setDescripcion("descripcion");
+                temp.setDescripcion(resultSet.getString("descripcion"));
                 artistas.add(temp);
             }
         } catch (SQLException e) {
