@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author rodvazqu
+ * @author JAVA-07
  */
 public class Disco {
     private Integer id;
@@ -26,6 +26,7 @@ public class Disco {
     private Iva iva;
     private String rutaImagen;
     private List<Artista> artistas;
+    private List<Cancion> canciones;
 
     /**
      * @return the id
@@ -207,6 +208,20 @@ public class Disco {
      */
     public void setArtistas(List<Artista> artistas) {
         this.artistas = artistas;
+    }
+
+    /**
+     * @return the canciones
+     */
+    public List<Cancion> getCanciones() {
+        return canciones;
+    }
+
+    /**
+     * @param canciones the canciones to set
+     */
+    public void setCanciones(List<Cancion> canciones) {
+        this.canciones = canciones;
     }
 
     

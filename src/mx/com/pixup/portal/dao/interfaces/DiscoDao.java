@@ -17,5 +17,5 @@ public interface DiscoDao {
     Disco updateDisco(Disco disco);
     void deleteDisco(Disco disco);
     List<Disco> findAllDiscos();
-    Disco findById(int idDisco);
+    Disco findById(Integer idDisco);
 }

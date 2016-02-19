@@ -5,14 +5,16 @@
  */
 package mx.com.pixup.portal.model;
 
+import java.sql.Time;
+
 /**
  *
- * @author mflores
+ * @author JAVA-07
  */
 public class Cancion {
     private Integer id;
     private String nombre;
-    private String duracion;
+    private Time duracion;
 
     /**
      * @return the id
@@ -45,14 +47,14 @@ public class Cancion {
     /**
      * @return the duracion
      */
-    public String getDuracion() {
+    public Time getDuracion() {
         return duracion;
     }
 
     /**
      * @param duracion the duracion to set
      */
-    public void setDuracion(String duracion) {
+    public void setDuracion(Time duracion) {
         this.duracion = duracion;
     }
 }
