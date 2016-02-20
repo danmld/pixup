@@ -129,14 +129,15 @@ public class DisqueraDaoJdbc implements DisqueraDao {
         List<Disquera> listDisqueras = disqueraDao.findAllDisqueras();
         for(Disquera disquera : listDisqueras)
         {
-            System.out.println("id: " + disquera.getNombre() );
+            System.out.println("id: "+disquera.getId()+",  nombre: " + disquera.getNombre() );
         }
         
-        Disquera d = disqueraDao.findById(1);
+        /*Disquera d = disqueraDao.findById(1);
         
         d.setNombre("daniel rec");
         disqueraDao.updateDisquera(d);
         System.out.println(""+d.getNombre());
+                */
     }
 
 }

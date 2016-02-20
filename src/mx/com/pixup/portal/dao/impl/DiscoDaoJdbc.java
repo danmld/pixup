@@ -443,5 +443,17 @@ public class DiscoDaoJdbc implements DiscoDao {
         }
 
     }
+    
+    public static void main(String[] args) {
+        DiscoDaoJdbc discoDao = new DiscoDaoJdbc();
+        List<Disco> discos = discoDao.findAllDiscos();
+        for(Disco disco: discos){
+            System.out.println("id: "+disco.getId()+", Titulo: "+disco.getTitulo());
+            System.out.println("artistas: ");
+            for (Artista artista : disco.getArtistas()){
+                System.out.println(artista.getNombreArtistico());
+            }
+        }
+    }
 
 }
